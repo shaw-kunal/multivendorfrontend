@@ -1,0 +1,7 @@
++++++++++++++++++++++++++++++++++++++++++
+2/14/2024-
+  => As i follow the beCodemy of multivendor e-commerce ,  i am using VITE+REACT PROJECT instead of React;
+
+  => important vs code extension:gitlens, Methril Emmet, path intellisense,tailwind css intellisense
+  
+  =>
