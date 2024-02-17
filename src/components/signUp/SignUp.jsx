@@ -1,19 +1,56 @@
 import React, { useState } from "react";
-import Input from "../Input";
 import { RxAvatar } from "react-icons/rx";
+import { Link, useNavigate } from "react-router-dom";
+import Input from "../Input";
 import Button from "../Button";
-import { Link } from "react-router-dom";
+import axios from 'axios'
+
+
+
 
 const SignUp = () => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  const navigate = useNavigate();
 
-  // const hand
 
-  console.log(avatar);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const user = {
+      name, password, email
+    }
+
+    if (avatar) {
+      const data = new FormData();
+      const filename = Date.now() + avatar.name;
+      data.append("name", filename);
+      data.append("file", avatar);
+      try {
+        await axios.post(import.meta.env.VITE_IMAGE + "upload", data)
+        user.avatar = filename;
+      } catch (error) {
+             //handle the error
+      }
+
+    }
+    
+    try {
+     const res= await axios.post(import.meta.env.VITE_PROXY+"/user/create-user",user)
+     
+       window.alert("Successfully Register")
+       navigate("/login");
+
+      
+    } catch (error) {
+      alert("something went wrong");
+    }
+
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-50  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -25,14 +62,15 @@ const SignUp = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form action="" className="space-y-6">
+          <form action="" className="space-y-6" onSubmit={handleSubmit}>
+
             <Input
               label={"Full Name"}
               name={"username"}
               placeholder="Enter Your Name"
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <Input
               label={"Email Address"}
@@ -89,6 +127,7 @@ const SignUp = () => {
                 />
               </div>
               <button
+                type="button"
                 className="border  mt-2 py-2 text-sm px-3 rounded-md"
                 onClick={(e) => setAvatar(null)}
               >
