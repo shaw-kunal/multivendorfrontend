@@ -2,11 +2,63 @@ import { useState } from "react";
 import Input from "../../components/Input.jsx";
 import Button from "../Button.jsx";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [emailErr, setEmailErr] = useState(null);
+  const [pwdErr, setPwdErr] = useState(null);
+
+
+  const checkEmail = () => {
+    if (email === '') {
+      setEmailErr("Email should not be empty")
+      return true;
+    }
+    setEmailErr('')
+    return false;
+  }
+  const checkPassword = () => {
+    if (password === '') {
+      setPwdErr("Password should not be empty")
+      return true;
+    }
+    setPwdErr('')
+    return false
+  }
+
+  const resetError = () => {
+    setEmailErr('');
+    setPwdErr('');
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    resetError();
+    const emailErr = checkEmail();
+    const passwordErr = checkPassword();
+
+    if (emailErr || passwordErr)
+      return;
+    console.log(email, password)
+
+
+    try {
+      const res = await axios.post(import.meta.env.VITE_PROXY + "/user/login-user", { email, password });
+      console.log(res)
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
+  }
+
+
+
+
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -18,7 +70,7 @@ const Login = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" action="">
+          <form className="space-y-6" action="" onSubmit={handleSubmit}>
             <Input
               label={"Email address"}
               type="email"
@@ -27,6 +79,9 @@ const Login = () => {
               placeholder="Enter Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onBlur={checkEmail}
+              error={emailErr}
+
             />
             <Input
               label={"Password"}
@@ -39,6 +94,8 @@ const Login = () => {
               isPassword={true}
               visible={visible}
               setVisible={setVisible}
+              onBlur={checkPassword}
+              error={pwdErr}
             />
 
             <div className="flex items-center justify-between">

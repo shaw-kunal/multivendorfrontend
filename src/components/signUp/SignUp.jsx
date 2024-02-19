@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../Input";
 import Button from "../Button";
 import axios from 'axios'
+import { toast } from "react-toastify";
+import swal from "sweetalert2"
+
 
 
 
@@ -14,18 +17,76 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const navigate = useNavigate();
+  const [fetching, setFetching] = useState(false);
+  const [nameError, setNameError] = useState('')
+  const [pwdError, setPwdError] = useState('')
+  const [emailError, setEmailError] = useState('')
+
+
+  const checkUsername = () => {
+    if (name === '') {
+      setNameError("username should not be empty");
+      return true;
+    }
+    setNameError('')
+    return false;
+  }
+
+  const checkPassword = () => {
+    if (checkPassword === '') {
+      setPwdError("Password should not be empty");
+      return true;
+    }
+    if (password.length < 8) {
+
+      setPwdError("The length of error must be atleast 8")
+      return true;
+    }
+    const pattern = /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+
+    if (!pattern.test(password)) {
+
+      setPwdError("Password must contain atleast one uppercase , one Special symbol and one digit");
+      return true;
+    }
+    setPwdError('')
+    return false;
+  }
+
+  const checkEmail = () => {
+    // Define the regex pattern for email validation
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Check if the email matches the pattern
+    if (!pattern.test(email))
+    {
+
+      setEmailError("Please enter a valid email address")
+      return true;
+    }
+    setEmailError('')
+    return false;
+
+  };
 
 
   const handleSubmit = async (e) => {
+    setEmailError('')
+    setNameError('')
+    setPwdError('')
     e.preventDefault();
-
+    const usernameErr = checkUsername();
+    const pwdErr = checkPassword();
+    const emailErr = checkEmail();
+    if (usernameErr || pwdErr || emailErr)
+      return;
     const user = {
       name, password, email
     }
 
-    if (avatar) {
-      const data = new FormData();
+    if (avatar) {   
+        setFetching(true)
+        const data = new FormData();
       const filename = Date.now() + avatar.name;
       data.append("name", filename);
       data.append("file", avatar);
@@ -33,24 +94,38 @@ const SignUp = () => {
         await axios.post(import.meta.env.VITE_IMAGE + "upload", data)
         user.avatar = filename;
       } catch (error) {
-             //handle the error
+        toast.error(error.response.error.message);
       }
-
+      finally {
+        setFetching(false);
+      }
     }
-    
-    try {
-     const res= await axios.post(import.meta.env.VITE_PROXY+"/user/create-user",user)
-     
-       window.alert("Successfully Register")
-       navigate("/login");
 
-      
+    try {
+      setFetching(true)
+
+      const res = await axios.post(import.meta.env.VITE_PROXY + "/user/create-user", user)
+      swal.fire({
+        title: res.data.message,
+        icon: 'success',
+      })
     } catch (error) {
-      alert("something went wrong");
+      swal.fire({
+        title: error.response.data.message,
+        icon: 'error',
+        color: "#716add",
+
+      })
+    }
+    finally{
+      setFetching(false)
+
     }
 
   }
 
+
+  
 
   return (
     <div className="min-h-screen bg-gray-50  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -71,6 +146,8 @@ const SignUp = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              error={nameError}
+              onBlur={checkUsername}
             />
             <Input
               label={"Email Address"}
@@ -80,6 +157,8 @@ const SignUp = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
+              error={emailError}
+              onBlur={checkEmail}
             />
             <Input
               label={"PassWord"}
@@ -91,6 +170,8 @@ const SignUp = () => {
               isPassword={true}
               visible={visible}
               setVisible={setVisible}
+              error={pwdError}
+              onBlur={checkPassword}
             />
 
             <div className="flex   justify-between ">
@@ -124,6 +205,7 @@ const SignUp = () => {
                   id="file-input"
                   accept=".jpg,.jpeg,.png"
                   onChange={(e) => setAvatar(e.target.files[0])}
+
                 />
               </div>
               <button
@@ -134,8 +216,7 @@ const SignUp = () => {
                 Remove it
               </button>
             </div>
-            <Button text={"submit"}></Button>
-
+            <Button disabled={fetching} text={"submit"}  ></Button>
             <div className="text-sm text-gray-700">
               <span>Already Have an account?</span>
               <Link className="ml-2 text-blue-500 hover:underline " to="/login">

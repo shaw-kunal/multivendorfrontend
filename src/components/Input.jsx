@@ -12,7 +12,11 @@ const Input = ({
   visible = true,
   isPassword = false,
   setVisible,
+  error = null,
+  onBlur
 }) => {
+
+
   return (
     <div className="space-y-2">
       <label className="block text-lg font-medium text-gray-800">{label}</label>
@@ -24,8 +28,10 @@ const Input = ({
           value={value}
           onChange={onChange}
           type={visible ? "text" : "password"}
-          className="appearance-none  block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          onBlur={onBlur}
+          className="appearance-none font-Poppins block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         />
+        <p className="absolute buttom-0 right-0 font-Poppins text-xs text-red-600">{error}</p>
         <div className="absolute top-2 right-2 cursor-pointer ">
           {isPassword ? (
             visible ? (
