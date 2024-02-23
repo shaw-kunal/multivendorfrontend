@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Input from "../../components/Input.jsx";
 import Button from "../Button.jsx";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import axios, { Axios } from "axios";
 import { toast } from "react-toastify";
+import swal from "sweetalert2"
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState(null);
   const [pwdErr, setPwdErr] = useState(null);
+  const navigate = useNavigate();
 
 
   const checkEmail = () => {
@@ -45,19 +47,24 @@ const Login = () => {
       return;
     console.log(email, password)
 
-
+    //  axios.defaults.withCredentials = true
     try {
-      const res = await axios.post(import.meta.env.VITE_PROXY + "/user/login-user", { email, password });
-      console.log(res)
+      const res = await axios.post(import.meta.env.VITE_PROXY + "/user/login-user", { email, password }, { withCredentials: true });
+console.log(res)
+      if(res.data.success)
+      {
+        swal.fire({
+          title: "Login Successfully",
+          icon: 'success',
+        })
+        navigate("/")
+      }
+
     } catch (error) {
-      toast.error(error.response.data.message)
+
+      toast.error(error.response?.data?.message)
     }
   }
-
-
-
-
-
 
 
   return (
