@@ -1,93 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { RxAvatar } from "react-icons/rx";
+import { useState } from "react";
+import Input from "../../components/Input.jsx";
+import Button from "../Button.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import Input from "../Input";
-import Button from "../Button";
-import axios from 'axios'
+import axios, { Axios } from "axios";
 import { toast } from "react-toastify";
 import swal from "sweetalert2"
-import { useSelector } from "react-redux";
-import { HomePage } from "../../routes/Routes";
+import { RxAvatar } from "react-icons/rx";
 
-
-
-
-
-const SignUp = () => {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+const ShopCreate = () => {
   const [email, setEmail] = useState("");
-  const [visible, setVisible] = useState(false);
-  const [avatar, setAvatar] = useState(null);
+  const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState("");
   const [fetching, setFetching] = useState(false);
-  const [nameError, setNameError] = useState('')
-  const [pwdError, setPwdError] = useState('')
-  const [emailError, setEmailError] = useState('')
-
+  const [emailErr, setEmailErr] = useState(null);
+  const [pwdErr, setPwdErr] = useState(null);
   const navigate = useNavigate();
-
-const {isAuthenticated} = useSelector(state=>state.user)
-
-  const checkUsername = () => {
-    if (name === '') {
-      setNameError("username should not be empty");
-      return true;
-    }
-    setNameError('')
-    return false;
-  }
-
-  const checkPassword = () => {
-    if (checkPassword === '') {
-      setPwdError("Password should not be empty");
-      return true;
-    }
-    if (password.length < 8) {
-
-      setPwdError("The length of error must be atleast 8")
-      return true;
-    }
-    const pattern = /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
-
-    if (!pattern.test(password)) {
-
-      setPwdError("Password must contain atleast one uppercase , one Special symbol and one digit");
-      return true;
-    }
-    setPwdError('')
-    return false;
-  }
+  // for shop 
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState()
+  const [address, setAddress] = useState("")
+  const [zipcode, setZipcode] = useState()
+  const [avatar, setAvatar] = useState()
 
   const checkEmail = () => {
-    // Define the regex pattern for email validation
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Check if the email matches the pattern
-    if (!pattern.test(email))
-    {
-
-      setEmailError("Please enter a valid email address")
+    if (email === '') {
+      setEmailErr("Email should not be empty")
       return true;
     }
-    setEmailError('')
+    setEmailErr('')
     return false;
+  }
+  const checkPassword = () => {
+    if (password === '') {
+      setPwdErr("Password should not be empty")
+      return true;
+    }
+    setPwdErr('')
+    return false
+  }
 
-  };
-
+  const resetError = () => {
+    setEmailErr('');
+    setPwdErr('');
+  }
+  
 
   const handleSubmit = async (e) => {
-    setEmailError('')
-    setNameError('')
-    setPwdError('')
+    setEmailErr('')
+    setPwdErr('')
     e.preventDefault();
-    const usernameErr = checkUsername();
+
     const pwdErr = checkPassword();
     const emailErr = checkEmail();
-    if (usernameErr || pwdErr || emailErr)
+    if ( pwdErr || emailErr)
       return;
     const user = {
-      name, password, email
+      name, password, email,address,zipcode,phoneNumber
     }
+    console.log(user)
 
     if (avatar) {   
         setFetching(true)
@@ -109,14 +79,15 @@ const {isAuthenticated} = useSelector(state=>state.user)
     try {
       setFetching(true)
 
-      const res = await axios.post(import.meta.env.VITE_PROXY + "/user/create-user", user)
+      const res = await axios.post(import.meta.env.VITE_PROXY + "/shop/create-shop", user)
       swal.fire({
         title: res.data.message,
         icon: 'success',
       })
     } catch (error) {
+      console.log(error)
       swal.fire({
-        title: error?.response?.data?.message,
+        title: error?.response?.message,
         icon: 'error',
         color: "#716add",
 
@@ -131,57 +102,86 @@ const {isAuthenticated} = useSelector(state=>state.user)
 
 
 
-
-  if(isAuthenticated===true)
-  {    return <HomePage/>
-   }
-
   return (
-    <div className="min-h-screen bg-gray-50  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto max-w-md">
-        <h2 className="mt-6 font-Poppins text-center text-3xl font-medium text-gray-900">
-          Register as a new user
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-bold font-Poppins text-gray-900">
+          Register  as a  seller
         </h2>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 sm:mx-auto sm:w-full max-w-5xl   ">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form action="" className="space-y-6" onSubmit={handleSubmit}>
-
+          <form className="grid  grid-cols-2 gap-5" action="" onSubmit={handleSubmit}>
             <Input
-              label={"Full Name"}
-              name={"username"}
-              placeholder="Enter Your Name"
-              type="text"
+              label={"Shop Name"}
+              type="name"
+              name="name"
+              placeholder="Enter Your shop name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              error={nameError}
-              onBlur={checkUsername}
+
             />
+
             <Input
-              label={"Email Address"}
-              name={"email"}
-              placeholder="Enter Your Esmail"
+              label={"Shop Email "}
               type="email"
+              name="Email"
+              autoComplete="email"
+              placeholder="Enter Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              error={emailError}
               onBlur={checkEmail}
+              error={emailErr}
             />
+
+
             <Input
-              label={"PassWord"}
-              name={"password"}
-              placeholder="Password"
+              label={"Phone Number "}
+              type="phone"
+              name="phone"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+
+
+
+            <Input
+              label={"Address"}
               type="text"
+              name="Address"
+              placeholder="Enter Your Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+
+
+
+            <Input
+              label={"ZipCode "}
+              type="number"
+              name="zipcOde"
+              value={zipcode}
+              onChange={(e) => setZipcode(e.target.value)}
+            />
+
+
+            <Input
+              label={"Password"}
+              type="password"
+              name="Password"
+              autoComplete="password"
+              placeholder="Enter Your Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               isPassword={true}
               visible={visible}
               setVisible={setVisible}
-              error={pwdError}
               onBlur={checkPassword}
+              error={pwdErr}
             />
+
+
 
             <div className="flex   justify-between ">
               <div className="mt-2 flex items-center justify-center ">
@@ -189,7 +189,7 @@ const {isAuthenticated} = useSelector(state=>state.user)
                   htmlFor="file-input"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  <span className="inline-flex h-8 w-8 rounded-full overflow-hidden">
+                  <span className="inline-flex  h-8 w-8 rounded-full overflow-hidden">
                     {avatar ? (
                       <img
                         src={URL.createObjectURL(avatar)}
@@ -225,18 +225,24 @@ const {isAuthenticated} = useSelector(state=>state.user)
                 Remove it
               </button>
             </div>
-            <Button disabled={fetching} text={"submit"}  ></Button>
-            <div className="text-sm text-gray-700">
-              <span>Already Have an account?</span>
-              <Link className="ml-2 text-blue-500 hover:underline " to="/login">
-                Sign In
+
+
+            <Button disabled={fetching}  text={"Submit"} type="submit" />
+            
+          </form>
+          <div className="w-full flex items-center mt-4 justify-center text-sm">
+              <h4>Already have an account?</h4>
+              <Link
+                to={"/shop-login"}
+                className="text-blue-500 ml-3 pb-1  hover:underline"
+              >
+                sign in
               </Link>
             </div>
-          </form>
         </div>
       </div>
     </div>
   );
 };
 
-export default SignUp;
+export default ShopCreate;

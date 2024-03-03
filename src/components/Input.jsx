@@ -3,8 +3,8 @@ import { AiFillEye } from "react-icons/ai";
 
 const Input = ({
   label,
-  name,
-  placeholder,
+  name="",
+  placeholder="",
   type,
   value,
   autoComplete = "email",
@@ -13,15 +13,17 @@ const Input = ({
   isPassword = false,
   setVisible,
   error = null,
-  onBlur
+  onBlur,
+  required= false
 }) => {
 
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       <label className="block text-lg font-medium text-gray-800">{label}</label>
       <div className="mt-1 relative">
         <input
+        required={required}
           name={name}
           placeholder={placeholder}
           autoComplete={autoComplete}

@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body{
+  
+}
+.logo {
+  width: 30%;
+}
+
+:root{
+  --row-gap:0.75rem;
+  --col-gap:0.75rem;
+}
+
+.greenColor{
+  color: green;
+}
+.redColor{
+  color: red;
 }
