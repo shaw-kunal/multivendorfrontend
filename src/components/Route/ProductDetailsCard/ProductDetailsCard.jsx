@@ -7,11 +7,12 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import styles from "../../../styles/styles";
+import { Link } from "react-router-dom";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
-  const handleMessageSubmit = () => {};
+  const handleMessageSubmit = () => { };
 
   const decrementCount = () => {
     if (count > 1) {
@@ -35,18 +36,21 @@ const ProductDetailsCard = ({ setOpen, data }) => {
             />
 
             <div className="block w-full 800px:flex">
-              <div className="w-full 800px:w-[50%]">
-                <img src={data.image_Url[0].url} alt="product_img" />
-                <div className="flex">
+              <div className="w-full 800px:w-[50%] overflow-hidden">
+                <img  className="mb-3" src={import.meta.env.VITE_IMAGE+ data.images[0]} alt="product_img" />
+                <div className="flex items-center">
                   <img
-                    src={data.shop.shop_avatar.url}
+                    // src={data.shop.shop_avatar.url }
+                    src={"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"}
                     alt="shop_avatar"
                     className="w-[50px] h-[50px] rounded-full mr-2"
                   />
                   <div>
-                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                    <Link to={`/shop/preview/${data?.shopId}`}>
+                      <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                    </Link>
                     <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Ratings
+                      {data?.shop?.ratings} Ratings
                     </h5>
                   </div>
                 </div>
@@ -66,10 +70,10 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 <h1 className={`${styles.productTitle} text-[20px]`}>
                   {data.name}
                 </h1>
-                <p>{data.description}</p>
+                <p>{data?.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discountPrice}$
+                    {data?.discountPrice}$
                   </h4>
                   <h3 className={`${styles.price}`}>
                     {/* issue here price not showing */}
@@ -79,16 +83,16 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 <div className="flex items-center mt-12 justify-between pr-3">
                   <div>
                     <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
                       onClick={decrementCount}
                     >
                       -
                     </button>
-                    <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">
+                    <span className="bg-gray-200 text-gray-800 font-medium px-4 py-2 mx-1 rounded">
                       {count}
                     </span>
                     <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
                       onClick={incrementCount}
                     >
                       +

@@ -26,7 +26,7 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-const {isAuthenticated} = useSelector(state=>state.user)
+  const { isAuthenticated } = useSelector(state => state.user)
 
   const checkUsername = () => {
     if (name === '') {
@@ -63,8 +63,7 @@ const {isAuthenticated} = useSelector(state=>state.user)
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Check if the email matches the pattern
-    if (!pattern.test(email))
-    {
+    if (!pattern.test(email)) {
 
       setEmailError("Please enter a valid email address")
       return true;
@@ -89,14 +88,14 @@ const {isAuthenticated} = useSelector(state=>state.user)
       name, password, email
     }
 
-    if (avatar) {   
-        setFetching(true)
-        const data = new FormData();
+    if (avatar) {
+      setFetching(true)
+      const data = new FormData();
       const filename = Date.now() + avatar.name;
       data.append("name", filename);
       data.append("file", avatar);
       try {
-        await axios.post(import.meta.env.VITE_IMAGE , data)
+        await axios.post(import.meta.env.VITE_IMAGE, data)
         user.avatar = filename;
       } catch (error) {
         toast.error(error?.response?.error?.message);
@@ -122,7 +121,7 @@ const {isAuthenticated} = useSelector(state=>state.user)
 
       })
     }
-    finally{
+    finally {
       setFetching(false)
 
     }
@@ -132,9 +131,9 @@ const {isAuthenticated} = useSelector(state=>state.user)
 
 
 
-  if(isAuthenticated===true)
-  {    return <HomePage/>
-   }
+  if (isAuthenticated === true) {
+    return <HomePage />
+  }
 
   return (
     <div className="min-h-screen bg-gray-50  flex flex-col justify-center py-12 sm:px-6 lg:px-8">

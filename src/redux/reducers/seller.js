@@ -5,13 +5,14 @@ import { toast } from "react-toastify";
 const LoadSellerRequest = createAction("LoadSellerRequest")
 const LoadSellerSucces = createAction("LoadSellerSucces")
 const LoadSellerFail = createAction("LoadSellerFail")
-const clearErrors = createAction("clearErrors")
+const sellerLogout = createAction("sellerLogout")
+const resetSellerState = createAction("resetSellerState")
 
 const initialState ={
     isSeller:false,
     loading:false,
     error:false,
-    user:null,
+    seller:null,
 }
 
 
@@ -25,14 +26,19 @@ export const sellerReducer = createReducer(initialState,(builder)=>{
         state.loading=false;
         state.seller = action.payload;
       }).addCase(LoadSellerFail,(state,action)=>{
-        toast.error("please Login to continue");
         state.loading = false;
         state.error = true;
         state.isSeller = false;
       })
       .addCase(
-      clearErrors,(state)=>{
-        state.error = null
+        sellerLogout,(state)=>{
+        state.seller = null,
+        state.isSeller=false
+      })
+      .addCase(
+        resetSellerState,(state)=>{
+        state.error = false,
+        state.loading= false
       })
 })
 

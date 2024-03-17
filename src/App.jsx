@@ -14,21 +14,32 @@ import {
   SellerActivationPage,
   ShoploginPage,
   ShopHomePage,
-  ShopDashboardpage
+  ShopPreviewPage
 } from "./routes/Routes.js";
+
+import {
+  ShopDashboardpage,
+  ShopCreateProduct,
+  ShopAllProducts,
+  ShopCreateEvents,
+  DashboardHomePage,
+  ShopAllEvents,
+  ShopAllCoupon
+} from "./routes/ShopRoutes.js"
 import "./App.css";
 import SignUp from "./components/signUp/SignUp.jsx";
 import ActivationPage from "./pages/ActivationPage.jsx";
 import Store from "./redux/store.js";
 import { loadUser } from "./redux/actions/user.js";
-import { useSelector } from "react-redux";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
 import ProtectedRoute from "./routes/protectedRoute.jsx";
+import { loadSeller } from "./redux/actions/seller.js";
 
 const App = () => {
 
   useEffect(() => {
     Store.dispatch(loadUser());
+    Store.dispatch(loadSeller());
   }, [])
 
   return (
@@ -46,7 +57,7 @@ const App = () => {
           element={<SellerActivationPage />}
         />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/product/:name" element={<ProductDetailsPage />} />
+        <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/best-selling" element={<BestSellingPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/Faq" element={<FaqPage />} />
@@ -54,18 +65,40 @@ const App = () => {
         {/* shop route */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShoploginPage />} />
+        <Route path="/shop/preview/:shopId" element={<ShopPreviewPage/>}/>
+
         <Route path="/shop/:id" element={
           <SellerProtectedRoute>
-            <ShopHomePage/>
+            <ShopHomePage />
           </SellerProtectedRoute>
         } />
 
-        <Route  path="/dashboard" element={
-
-        <SellerProtectedRoute>
-            <ShopDashboardpage/>
+        <Route path="/dashboard" element={
+          <SellerProtectedRoute>
+            <ShopDashboardpage />
           </SellerProtectedRoute>
-        }/>
+        }>
+          <Route index element={
+             <DashboardHomePage />
+          } />
+          <Route path="create-product" element={
+            <ShopCreateProduct />
+          } />
+          <Route path="products" element={
+            <ShopAllProducts />
+          } />
+          <Route path="create-event" element={
+            <ShopCreateEvents />
+          } />
+          <Route path="events" element={
+            <ShopAllEvents />
+          } />
+          <Route path="coupons" element={
+            <ShopAllCoupon />
+          } />
+        </Route>
+
+
 
         <Route path="/checkout" element={
           <ProtectedRoute >
@@ -82,5 +115,8 @@ const App = () => {
     </BrowserRouter>
   );
 };
+
+
+
 
 export default App;

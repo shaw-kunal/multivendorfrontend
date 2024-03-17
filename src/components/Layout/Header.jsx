@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
 import { categoriesData, productData } from "../../static/data";
@@ -14,11 +14,10 @@ import { CgProfile } from "react-icons/cg";
 import DropDown from "./DropDown.jsx";
 import Navbar from "./Navbar.jsx";
 import { useSelector } from "react-redux";
-
-
 import Cart from "../cart/Cart.jsx";
 import Wishlist from "../wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
+import axios from "axios";
 
 const Header = ({ activeHeading }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,13 +29,14 @@ const Header = ({ activeHeading }) => {
   const [open, setOpen] = useState(false);
   const { user, isAuthenticated } = useSelector(state => state.user)
 
+  const [product, setProduct] = useState([]);
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
     const filteredProducts =
-      productData &&
-      productData.filter((product) =>
+      product &&
+      product.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filteredProducts);
@@ -49,6 +49,19 @@ const Header = ({ activeHeading }) => {
       setActive(false);
     }
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(import.meta.env.VITE_PROXY + "/product/");
+        setProduct(data.products);
+      } catch (error) {
+        console.log("something went wrong in ");
+      }
+    }
+    fetchData();
+  }, []);
+
 
 
   return (
@@ -86,11 +99,11 @@ const Header = ({ activeHeading }) => {
                     {
                       return (
                         <Link to={`/product/${Product_name}`}>
-                          <div className="w-full flex items-start-py-3">
+                          <div className="w-full flex items-start py-3">
                             <img
-                              src={i.image_Url[0].url}
+                              src={import.meta.env. VITE_IMAGE + i.images[0]}
                               alt="img"
-                              className="w-[40px] h-[40px] mr-[10px]"
+                              className="w-[40px] h-[40px] mr-[10px] rounded-full"
                             />
                             <h1>{i.name}</h1>
                           </div>
@@ -260,76 +273,76 @@ const Header = ({ activeHeading }) => {
 
 
                 <div className="my-8 w-[92%] m-auto h-[40px] ">
-                <input
-                  type="search"
-                  placeholder="Search Product..."
-                  className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-                 {searchData && (
-                  <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
-                    {searchData.map((i) => {
-                      const d = i.name;
+                  <input
+                    type="search"
+                    placeholder="Search Product..."
+                    className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                  {searchData && (
+                    <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
+                      {searchData.map((i) => {
+                        const d = i.name;
 
-                      const Product_name = d.replace(/\s+/g, "-");
-                      return (
-                        <Link to={`/product/${Product_name}`}>
-                          <div className="flex items-center">
-                            <img
-                              src={i.image_Url[0]?.url}
-                              alt=""
-                              className="w-[50px] mr-2"
-                            />
-                            <h5>{i.name}</h5>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
+                        const Product_name = d.replace(/\s+/g, "-");
+                        return (
+                          <Link to={`/product/${Product_name}`}>
+                            <div className="flex items-center mb-2">
+                              <img
+                                src={import.meta.env.VITE_IMAGE+ i.images[0]}
+                                alt="Not found"
+                                className="w-[50px] h-[50px]  rounded-full mr-2"
+                              />
+                              <h5 className="line-clamp-1">{i.name}</h5>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <Navbar active={activeHeading} />
 
                 <div className={`${styles.button} ml-4 !rounded-[4px]`}>
-                <Link to="/shop-create">
-                  <h1 className="text-[#fff] flex items-center">
-                    Become Seller <IoIosArrowRoundForward className="ml-1" />
-                  </h1>
-                </Link>
-              </div>
-              <br />
-              <br />
-              <br />
-              <div className="flex w-full justify-center">
-                {isAuthenticated ? (
-                  <div>
-                    <Link to="/profile">
-                      <img
-                        src={`${user.avatar?.url}`}
-                        alt=""
-                        className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
-                      />
-                    </Link>
-                  </div>
-                ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      className="text-[18px] pr-[10px] text-[#000000b7]"
-                    >
-                      Login /
-                    </Link>
-                    <Link
-                      to="/sign-up"
-                      className="text-[18px] text-[#000000b7]"
-                    >
-                      Sign up
-                    </Link>
-                  </>
-                )}
-              </div>
+                  <Link to="/shop-create">
+                    <h1 className="text-[#fff] flex items-center">
+                      Become Seller <IoIosArrowRoundForward className="ml-1" />
+                    </h1>
+                  </Link>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div className="flex w-full justify-center">
+                  {isAuthenticated ? (
+                    <div>
+                      <Link to="/profile">
+                        <img
+                          src={`${user.avatar?.url}`}
+                          alt=""
+                          className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
+                        />
+                      </Link>
+                    </div>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        className="text-[18px] pr-[10px] text-[#000000b7]"
+                      >
+                        Login /
+                      </Link>
+                      <Link
+                        to="/sign-up"
+                        className="text-[18px] text-[#000000b7]"
+                      >
+                        Sign up
+                      </Link>
+                    </>
+                  )}
+                </div>
 
               </div>
             </div>

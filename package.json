@@ -29,6 +29,7 @@
     "react-sweetalert2": "^0.6.0",
     "react-toastify": "^10.0.4",
     "redux": "^5.0.1",
+    "sonner": "^1.4.3",
     "sweetalert": "^2.1.2"
   },
   "devDependencies": {

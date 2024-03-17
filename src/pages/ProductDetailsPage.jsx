@@ -5,25 +5,35 @@ import ProductDetails from '../components/Products/ProductDetails.jsx'
 import SuggestedProduct from "../components/Products/SuggestedProduct.jsx"
 import { useParams } from 'react-router-dom'
 import { productData } from '../static/data.jsx'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 const ProductDetailsPage = () => {
 
-   const [data, setData] = useState(null)
-   const { name } = useParams();
-   const productName = name.replace(/-/g," ");
+  const [data, setData] = useState('')
+  const { id } = useParams();
+
   useEffect(() => {
-        const data = productData.find((i) => i.name === productName)
-        setData(data)
-        console.log(data)
-    }, [])
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(import.meta.env.VITE_PROXY + `/product/${id}`)
+        setData(data?.product);
+      } catch (error) {
+        console.log(error)
+        toast.error(error.reponse.data.message);
+      }
+
+    }
+    fetchData();
+  }, [])
 
   return (
     <div>
-        <Header/>
-        <ProductDetails data={data} />
-        {
-          data && <SuggestedProduct data={data}/>
-        }
-        <Footer/>
+      <Header />
+      <ProductDetails data={data} />
+      {
+        data && <SuggestedProduct data={data} />
+      }
+      <Footer />
     </div>
   )
 }

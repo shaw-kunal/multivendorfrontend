@@ -50,15 +50,14 @@ const ShopLogin = () => {
     //  axios.defaults.withCredentials = true
     try {
       const res = await axios.post(import.meta.env.VITE_PROXY + "/shop/login-shop", { email, password }, { withCredentials: true });
-console.log(res)
-      if(res.data.success)
-      {
+      console.log(res)
+      if (res.data.success) {
         swal.fire({
           title: "Login Successfully",
           icon: 'success',
         })
         navigate("/dashboard")
-        window.location.reload(true)
+        window.location.reload(true);
       }
 
     } catch (error) {

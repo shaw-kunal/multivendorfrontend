@@ -2,44 +2,34 @@ import React from "react";
 import styles from "../../styles/styles";
 import CountDown from "./CountDown";
 
-const EventCard = ({ active }) => {
+const EventCard = ({ data, active }) => {
   return (
     <div
-      className={`w-full block bg-white rounded-lg ${
-        active ? "unset" : "mb-12"
-      } lg:flex p-2`}
+      className={`w-full flex  gap-4 bg-white rounded-lg ${active ? "unset" : "mb-12"
+        } lg:flex p-2`}
     >
-      <div className="w-full lg:-w[50%] m-auto">
-        <img
-          src="https://m.media-amazon.com/images/I/31Vle5fVdaL.jpg"
-          alt="ihpone_image"
-        />
+      <div className="w-full lg:flex-1 m-auto">
+        <img className="rounded-sm border" src={import.meta.env.VITE_IMAGE + data.images[0]} alt="" />
+
       </div>
-      <div className="w-full lg:[w-50%] flex flex-col justify-center">
-        <h2 className={`${styles.productTitle}`}>Iphone 14 pro max 8/256gb</h2>
+      <div className="w-full lg:flex-1 flex flex-col justify-center">
+        <h2 className={`${styles.productTitle}`}>{data.name}</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos vero
-          rem aspernatur, facilis amet, praesentium dolores mollitia possimus
-          similique cum labore assumenda, esse enim quis reiciendis fugit
-          numquam? Ipsum, harum? Lorem ipsum dolor sit amet consectetur,
-          adipisicing elit. In sint eveniet excepturi assumenda animi nobis,
-          facere possimus? Recusandae non eveniet esse tempora, ullam qui
-          voluptas doloremque exercitationem deleniti quibusdam dolor!
-        </p>
+          {data.description}</p>
         <div className="flex py-2 justify-between">
           <div className="flex">
             <h5 className="font-[500] text-[18px] text-[#d55b45] pr-3 line-through">
-              1200$
+              {data.originalPrice}$
             </h5>
             <h5 className="font-bold text-[20px] text-[#333] font-Roboto">
-              1000$
+              {data.discountPrice}$
             </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
             120 sold
           </span>
         </div>
-        <CountDown />
+        <CountDown  data={data} />
         <br />
       </div>
     </div>
