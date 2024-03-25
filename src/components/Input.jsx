@@ -31,7 +31,7 @@ const Input = ({
           onChange={onChange}
           type={visible ? "text" : "password"}
           onBlur={onBlur}
-          className="appearance-none font-Poppins block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          className="appearance-none font-Poppins block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-lg "
         />
         <p className="absolute buttom-0 right-0 font-Poppins text-xs text-red-600">{error}</p>
         <div className="absolute top-2 right-2 cursor-pointer ">

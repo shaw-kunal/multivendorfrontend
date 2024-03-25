@@ -28,7 +28,8 @@ const Header = ({ activeHeading }) => {
   const [openWishlist, setOpenWishlist] = useState(false)
   const [open, setOpen] = useState(false);
   const { user, isAuthenticated } = useSelector(state => state.user)
-
+  const {cart} = useSelector(state=>state.cart)
+  const {wishlist} = useSelector(state=>state.wishlist)
   const [product, setProduct] = useState([]);
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -95,10 +96,9 @@ const Header = ({ activeHeading }) => {
                 {searchData &&
                   searchData.map((i, index) => {
                     const d = i.name;
-                    const Product_name = d.replace(/\s+/g, "-");
                     {
                       return (
-                        <Link to={`/product/${Product_name}`}>
+                        <Link to={`/product/${i._id}`}>
                           <div className="w-full flex items-start py-3">
                             <img
                               src={import.meta.env. VITE_IMAGE + i.images[0]}
@@ -123,7 +123,6 @@ const Header = ({ activeHeading }) => {
           </div>
         </div>
       </div>
-
       {/* blue bar */}
       <div
         className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
@@ -167,8 +166,7 @@ const Header = ({ activeHeading }) => {
               <div className="relative cursor-pointer mr-[15px]">
                 <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" onClick={() => setOpenWishlist(true)} />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                  {" "}
-                  0
+                  {wishlist.length}
                 </span>
               </div>
             </div>
@@ -181,7 +179,7 @@ const Header = ({ activeHeading }) => {
                   color="rgb(255 255 255 / 83%)"
                 />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                  0
+                  {cart.length}
                 </span>
               </div>
             </div>
@@ -214,7 +212,6 @@ const Header = ({ activeHeading }) => {
 
 
       </div>
-
       <div className="w-full h-16 flex bg-white z-50 top-0 left-0 shadow-sm 800px:hidden">
         <div className="w-full flex items-center justify-between">
           <div>

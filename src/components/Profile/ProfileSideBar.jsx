@@ -32,7 +32,7 @@ const ProfileSideBar = ({ active, setActive }) => {
                 <CiShoppingCart size={20} color={active === 2 ? "red" : ""} fontWeight={"600"} />
                 <span className={`pl-3  font-Poppins font-semibold ${active === 2 ? "text-red-500" : ""} hidden 800px:block`}>Orders</span>
             </div>
-            <div onClick={() => setActive(3)} className='flex items-center cursor-pointer w-full mb-8'>
+            {/* <div onClick={() => setActive(3)} className='flex items-center cursor-pointer w-full mb-8'>
                 <HiOutlineReceiptRefund size={20} color={active === 3 ? "red" : ""} fontWeight={"600"} />
                 <span className={`pl-3  font-Poppins font-semibold ${active === 3 ? "text-red-500" : ""} hidden 800px:block`}>Reunds</span>
             </div>
@@ -43,10 +43,10 @@ const ProfileSideBar = ({ active, setActive }) => {
             <div onClick={() => setActive(5)} className='flex items-center cursor-pointer w-full mb-8'>
                 <FaLocationDot size={20} color={active === 5 ? "red" : ""}  />
                 <span className={`pl-3  font-Poppins font-semibold ${active === 5? "text-red-500" : ""} hidden 800px:block`}>Track Order</span>
-            </div>
+            </div> */}
             <div onClick={() => setActive(6)} className='flex items-center cursor-pointer w-full mb-8'>
                 <MdPayment size={20} color={active === 6 ? "red" : ""}  />
-                <span className={`pl-3  font-Poppins font-semibold ${active === 6? "text-red-500" : ""} hidden 800px:block`}>Payment Method</span>
+                <span className={`pl-3  font-Poppins font-semibold ${active === 6? "text-red-500" : ""} hidden 800px:block`}>Change Password</span>
             </div>
             <div onClick={() => setActive(7)} className='flex items-center cursor-pointer w-full mb-8'>
                 <FaAddressCard size={20} color={active === 7 ? "red" : ""}  />

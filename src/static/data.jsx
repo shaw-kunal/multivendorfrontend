@@ -3,22 +3,22 @@ export const navItems = [
   {
     title: "Home",
     url: "/",
-  },
-  {
-    title: "Best Selling",
-    url: "/best-selling",
+    id:1,
   },
   {
     title: "Products",
     url: "/products",
+    id:2
   },
   {
     title: "Events",
     url: "/events",
+    id:3
   },
   {
     title: "FAQ",
     url: "/faq",
+    id:4
   },
 ];
 
@@ -228,14 +228,14 @@ export const categoriesData = [
     id: 6,
     title: "Gifts",
     subTitle: "",
-    image_Url:
-      "https://securecdn.pymnts.com/wp-content/uploads/2014/11/Gifts-Photo-700x489.jpg",
+    image_Url:"https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    
   },
   {
     id: 7,
     title: "Pet Care",
     subTitle: "",
-    image_Url: "https://cdn.openpr.com/T/c/Tc15444071_g.jpg",
+    image_Url: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGV0JTIwY2FyZXxlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     id: 8,

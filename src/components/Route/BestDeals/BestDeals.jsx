@@ -9,7 +9,7 @@ const BestDeals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(import.meta.env.VITE_PROXY + "/product/?limit=5");
+        const { data } = await axios.get(import.meta.env.VITE_PROXY + "/product/?limit=10");
         setData(data.products);
       } catch (error) {
         console.log("something went wrong in bestDeal");

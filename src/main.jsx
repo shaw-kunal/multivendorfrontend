@@ -10,23 +10,23 @@ import Store from './redux/store.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <>
-  <Provider store={Store}>
+    <Provider store={Store}>
 
-    <App />
-    <ToastContainer
-      position="bottom-center"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-      transition:Bounce
-/>
-</Provider>
+      <App />
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+      />
+    </Provider>
 
   </>,
 )

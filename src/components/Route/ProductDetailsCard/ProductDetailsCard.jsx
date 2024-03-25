@@ -8,20 +8,62 @@ import {
 } from "react-icons/ai";
 import styles from "../../../styles/styles";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addToCart } from "../../../redux/actions/cart";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../../redux/actions/wishlist";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
+  const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setClick(wishlist.some(item => item._id === data._id))
+  }, [wishlist])
+
+
+
   const handleMessageSubmit = () => { };
 
+  const incrementCount = () => {
+    if (data.stock > count) {
+      setCount(count + 1);
+    } else {
+      toast.error(`Stock limit exceeds${data.stock} ${count}`);
+    }
+  };
   const decrementCount = () => {
-    if (count > 1) {
-      setCount(count - 1);
+    if (count > 1) setCount(count - 1);
+  };
+
+  const handleAddToCart = () => {
+    console.log(cart);
+    const isItemExist =
+      cart && cart.find((i) => i._id === data._id && i.qty === count);
+
+    if (isItemExist) {
+      toast.error("item is already in cart!");
+    } else {
+      const cartData = { ...data, qty: count };
+      dispatch(addToCart(cartData));
+      toast.success("Item added to cart");
     }
   };
 
-  const incrementCount = () => {
-    setCount(count + 1);
+  const wishlishHandler = () => {
+    if (!click) {
+      dispatch(addToWishlist(data));
+      setClick(true);
+    } else {
+      dispatch(removeFromWishlist(data));
+      setClick(false);
+    }
   };
 
   return (
@@ -37,17 +79,25 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%] overflow-hidden">
-                <img  className="mb-3" src={import.meta.env.VITE_IMAGE+ data.images[0]} alt="product_img" />
+                <img
+                  className="mb-3"
+                  src={import.meta.env.VITE_IMAGE + data.images[0]}
+                  alt="product_img"
+                />
                 <div className="flex items-center">
                   <img
                     // src={data.shop.shop_avatar.url }
-                    src={"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"}
+                    src={
+                      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D"
+                    }
                     alt="shop_avatar"
                     className="w-[50px] h-[50px] rounded-full mr-2"
                   />
                   <div>
                     <Link to={`/shop/preview/${data?.shopId}`}>
-                      <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                      <h3 className={`${styles.shop_name}`}>
+                        {data.shop.name}
+                      </h3>
                     </Link>
                     <h5 className="pb-3 text-[15px]">
                       {data?.shop?.ratings} Ratings
@@ -100,29 +150,25 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   </div>
 
                   <div>
-                    {click ? (
-                      <AiFillHeart
-                        size={30}
-                        className="cursor-pointer"
-                        onClick={() => setClick(!click)}
-                        color={click ? "red" : "#333"}
-                        title="Remove from wishlist"
-                      />
-                    ) : (
-                      <AiOutlineHeart
-                        size={30}
-                        className="cursor-pointer"
-                        onClick={() => setClick(!click)}
-                        title="Add to wishlist"
-                      />
-                    )}
+                    <AiFillHeart
+                      size={30}
+                      className="cursor-pointer"
+                      color={click ? "red" : "#333"}
+                      title={
+                        click ? "Added to wishlist" : "Removed from wishlist"
+                      }
+                      onClick={wishlishHandler}
+                    />
                   </div>
                 </div>
                 <div
                   className={`${styles.button} mt-6 rounded-[4px] h-11 flex items-center`}
                   onClick={() => addToCartHandler(data._id)}
                 >
-                  <span className="text-[#fff] flex items-center">
+                  <span
+                    className="text-[#fff] flex items-center"
+                    onClick={handleAddToCart}
+                  >
                     Add to cart <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AiFillHeart,
   AiFillStar,
@@ -10,45 +10,77 @@ import {
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeItem } from "../../../redux/actions/cart.js";
+import { toast } from "react-toastify";
+import { addToWishlist, removeFromWishlist } from "../../../redux/actions/wishlist.js";
 
 const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-  const d = data.name;
-  const product_name = d.replace(/\s/g, "-");
-
+  const { cart } = useSelector(state => state.cart);
+  const { wishlist } = useSelector(state => state.wishlist);
+  const [addedTocart, setAddedToCart] = useState();
+  const dispatch = useDispatch();
   const removeFromWishlistHandler = (data) => {
     setClick(!click);
-    // dispatch(removeFromWishlist(data));
+    dispatch(removeFromWishlist(data));
   };
 
   const addToWishlistHandler = (data) => {
     setClick(!click);
-    // dispatch(addToWishlist(data));
+    dispatch(addToWishlist(data));
   };
 
-  const addToCartHandler = (id) => {
-    // const isItemExists = cart && cart.find((i) => i._id === id);
-    // if (isItemExists) {
-    //   toast.error("Item already in cart!");
-    // } else {
-    //   if (data.stock < 1) {
-    //     toast.error("Product stock limited!");
-    //   } else {
-    //     const cartData = { ...data, qty: 1 };
-    //     dispatch(addTocart(cartData));
-    //     toast.success("Item added to cart successfully!");
-    //   }
-    // }
+  const addToCartHandler = () => {
+    const isItemExists = cart && cart.find((i) => i._id === data._id);
+    if (isItemExists) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < 1) {
+        toast.error("Product stock limited!");
+      } else {
+        const cartData = { ...data, qty: 1 };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart successfully!");
+        setAddedToCart(true)
+      }
+    }
   };
+
+
+  const handleItemRemove = () => {
+    dispatch(removeItem(data._id))
+    setAddedToCart(false)
+  }
+
+  const handleClick = () => {
+    if (addedTocart) {
+      handleItemRemove();
+    }
+    else {
+      addToCartHandler();
+    }
+  }
+
+  useEffect(()=>{
+   setAddedToCart(cart.some(item=>item._id===data._id))
+   setClick(wishlist.some(item=>item._id===data._id));
+  },[cart,wishlist])
+
+
+
+
 
   
+
   return (
     <>
-      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
-        <div className="flex justify-end"></div>
+      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 px-8 relative cursor-pointer">
+        <div className="flex justify-end pr-2 "></div>
         <Link to={`/product/${data._id}`}>
           <img
+        
             src={import.meta.env.VITE_IMAGE + data.images[0]}
             alt="image"
             className="w-full h-[170px] object-contain"
@@ -93,20 +125,15 @@ const ProductCard = ({ data }) => {
           </div>
 
           <div className="py-2 flex items-center justify-between">
-            <div className="flex">
-              <h5 className={`${styles.productDiscountPrice}`}>
-
+            <div className="flex items-center justify-center">
+              <h5 className={`${styles.productDiscountPrice} text-green-500`}>
                 {data?.originalPrice === 0 ? data?.originalPrice : data?.discountPrice} $
               </h5>
               {/* issue data price not showing even though it exists */}
-              <h4 className={`${styles.price}`}>
-
+              <h4 className={`${styles.price} font-Poppins `}>
                 {data?.originalPrice ? data?.originalPrice + " $" : null}
               </h4>
             </div>
-            <span className="font-[400] text-[17px] text-[#68d284]">
-              {data?.total_sell || 2} sold
-            </span>
           </div>
         </Link>
 
@@ -143,9 +170,10 @@ const ProductCard = ({ data }) => {
           <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
-            onClick={() => addToCartHandler(data._id)}
             color="#444"
             title="Add to cart"
+            fill={addedTocart ? "green" : "gray"}
+            onClick={handleClick}
           />
           {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
         </div>

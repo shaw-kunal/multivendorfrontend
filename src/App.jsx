@@ -24,7 +24,9 @@ import {
   ShopCreateEvents,
   DashboardHomePage,
   ShopAllEvents,
-  ShopAllCoupon
+  ShopAllCoupon,
+  ShopAllOrders,
+  ShopOrderDetails,
 } from "./routes/ShopRoutes.js"
 import "./App.css";
 import SignUp from "./components/signUp/SignUp.jsx";
@@ -34,8 +36,14 @@ import { loadUser } from "./redux/actions/user.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
 import ProtectedRoute from "./routes/protectedRoute.jsx";
 import { loadSeller } from "./redux/actions/seller.js";
+import Shipping from "./components/checkout/Shipping.jsx";
+import Payment from "./components/checkout/Payment.jsx";
+import PaymentSuccess from "./components/checkout/PaymentSuccess.jsx";
 
 const App = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     Store.dispatch(loadUser());
@@ -65,7 +73,7 @@ const App = () => {
         {/* shop route */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShoploginPage />} />
-        <Route path="/shop/preview/:shopId" element={<ShopPreviewPage/>}/>
+        <Route path="/shop/preview/:shopId" element={<ShopPreviewPage />} />
 
         <Route path="/shop/:id" element={
           <SellerProtectedRoute>
@@ -79,7 +87,7 @@ const App = () => {
           </SellerProtectedRoute>
         }>
           <Route index element={
-             <DashboardHomePage />
+            <DashboardHomePage />
           } />
           <Route path="create-product" element={
             <ShopCreateProduct />
@@ -87,6 +95,14 @@ const App = () => {
           <Route path="products" element={
             <ShopAllProducts />
           } />
+          <Route path="all-orders" element={
+            <ShopAllOrders />
+          } />
+          
+          <Route path="order/:id" element={
+            <ShopOrderDetails />
+          } />
+          
           <Route path="create-event" element={
             <ShopCreateEvents />
           } />
@@ -96,21 +112,26 @@ const App = () => {
           <Route path="coupons" element={
             <ShopAllCoupon />
           } />
+         
         </Route>
-
 
 
         <Route path="/checkout" element={
           <ProtectedRoute >
             <CheckoutPage />
           </ProtectedRoute>
-        } />
+        } >
+          <Route path="shipping" element=<Shipping /> />
+          <Route path="payment" element=<Payment /> />
+          <Route path="success" element={<PaymentSuccess /> }/>
+        </Route>
 
         <Route path="/profile" element={
           <ProtectedRoute >
             <ProfilePage />
           </ProtectedRoute>
         } />
+
       </Routes>
     </BrowserRouter>
   );

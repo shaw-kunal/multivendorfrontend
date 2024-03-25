@@ -18,7 +18,7 @@ const EventsPage = () => {
   return (
     <>
       <div>
-        <Header activeHeading={4} />
+        <Header activeHeading={3} />
         {
          event&& event.map((item)=><EventCard key={item._id} data = {item} active={true} />)
         }

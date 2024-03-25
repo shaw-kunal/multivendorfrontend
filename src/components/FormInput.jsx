@@ -24,7 +24,7 @@ const FormInput = ({
               type={type}
               value={value}
               onChange={onChange}
-              className="border font-Poppins p-1 font-medium  text-slate-600 rounded-sm focus:border-blue-200 placeholder:font-Poppins"
+              className="border font-Poppins font-medium p-1  text-slate-600 rounded-sm focus:border-blue-200 placeholder:font-Poppins"
               placeholder={placeholder}
             />
             : <input

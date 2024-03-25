@@ -20,7 +20,7 @@ const DashboardSideBar = () => {
                 </Link>
             </div>
             <div className="w-full flex items-center p-4">
-                <Link to="orders" className="w-full  flex items-center" onClick={()=>setActive(2)}>
+                <Link to="all-orders" className="w-full  flex items-center" onClick={()=>setActive(2)}>
                     <AiOutlineShopping size={25} color={`${active == 2 ? "red" : "#555"}`} />
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 2 ? "text-[crimson]" : "text-gray-600"}`}>All order</h5>
                 </Link>
@@ -49,19 +49,19 @@ const DashboardSideBar = () => {
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 6 ? "text-[crimson]" : "text-gray-600"}`}>Create Events</h5>
                 </Link>
             </div>
-            <div className="w-full flex items-center p-4">
+            {/* <div className="w-full flex items-center p-4">
                 <Link to="withdraw-money" className="w-full  flex items-center" onClick={()=>setActive(7)}>
                     <AiOutlineMoneyCollect size={25} color={`${active == 7 ? "red" : "#555"}`} />
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 7 ? "text-[crimson]" : "text-gray-600"}`}>WidthDraw Money</h5>
                 </Link>
-            </div>
+            </div> */}
 
-            <div className="w-full flex items-center p-4">
+            {/* <div className="w-full flex items-center p-4">
                 <Link to="message" className="w-full  flex items-center" onClick={()=>setActive(8)}>
                     <BiMessage size={25} color={`${active == 8 ? "red" : "#555"}`} />
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 8 ? "text-[crimson]" : "text-gray-600"}`}>Shop Inbox</h5>
                 </Link>
-            </div>
+            </div> */}
 
             <div className="w-full flex items-center p-4">
                 <Link to="coupons" className="w-full  flex items-center" onClick={()=>setActive(9)}>
@@ -69,7 +69,7 @@ const DashboardSideBar = () => {
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 9 ? "text-[crimson]" : "text-gray-600"}`}>Discount Code</h5>
                 </Link>
             </div>
-            <div className="w-full flex items-center p-4">
+            {/* <div className="w-full flex items-center p-4">
                 <Link to="coupon" className="w-full  flex items-center" onClick={()=>setActive(10)}>
                     <RiRefund2Line size={25} color={`${active == 10 ? "red" : "#555"}`} />
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 10 ? "text-[crimson]" : "text-gray-600"}`}>Order Refund</h5>
@@ -80,7 +80,7 @@ const DashboardSideBar = () => {
                     <AiOutlineRadiusSetting size={25} color={`${active == 11 ? "red" : "#555"}`} />
                     <h5 className={`hidden 800px:flex pl-2 text-sm 800px:text-lg  font-Poppins ${active == 11 ? "text-[crimson]" : "text-gray-600"}`}>Settings</h5>
                 </Link>
-            </div>
+            </div> */}
 
         </div>
     )
