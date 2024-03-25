@@ -120,7 +120,7 @@ console.log(res)
                   href="#"
                   className="font-medium text-blue-600 hover:text-blue-500"
                 >
-                  Forgot Your password?
+                  {/* Forgot Your password? */}
                 </a>
               </div>
             </div>
